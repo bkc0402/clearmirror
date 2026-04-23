@@ -50,7 +50,7 @@ export default function TeacherDashboard() {
   useEffect(() => {
     async function load() {
       const [{ data: s }, { data: t }] = await Promise.all([
-        supabase.from('students').select('*').eq('status', '진행 중').order('lesson_time'),
+        supabase.from('students').select('*').neq('status', '완료').neq('status', '중단').order('lesson_time'),
         supabase.from('textbooks').select('*').order('name'),
       ])
       setStudents(s ?? [])
