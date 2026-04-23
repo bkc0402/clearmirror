@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import type { Student, Assignment, Textbook } from '@/types'
 
@@ -29,7 +29,7 @@ function formatToday(): string {
 const STATUS_ORDER: Assignment['status'][] = ['과제부과','수행중','수행완료','수업완료']
 
 export default function TeacherDashboard() {
-  const supabase = createClient()
+  const supabase = useMemo(() => createClient(), [])
   const [students, setStudents] = useState<Student[]>([])
   const [textbooks, setTextbooks] = useState<Textbook[]>([])
   const [selected, setSelected] = useState<Student | null>(null)
