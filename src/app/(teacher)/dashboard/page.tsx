@@ -5,14 +5,22 @@ import DashboardClient from './DashboardClient'
 export default async function DashboardPage() {
   const supabase = await createClient()
 
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { user }, error: authError } = await supabase.auth.getUser()
+  
+  console.log('AUTH USER:', user?.id, 'ERROR:', authError?.message)
+  
   if (!user) redirect('/login')
 
-  // 서버에서 직접 데이터 조회 (세션 확실히 있음)
-  const [{ data: students }, { data: textbooks }] = await Promise.all([
-    supabase.from('students').select('*').neq('status', '완료').neq('status', '중단').order('lesson_time'),
-    supabase.from('textbooks').select('*').order('name'),
-  ])
+  const { data: students, error: studentsError } = await supabase
+    .from('students')
+    .select('*')
+  
+  const { data: textbooks, error: textbooksError } = await supabase
+    .from('textbooks')
+    .select('*')
+
+  console.log('STUDENTS:', students?.length, 'ERROR:', studentsError?.message)
+  console.log('TEXTBOOKS:', textbooks?.length, 'ERROR:', textbooksError?.message)
 
   return (
     <DashboardClient
