@@ -1,4 +1,4 @@
-import { createServerClient, type CookieOptions } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
 export async function createClient() {
@@ -12,12 +12,14 @@ export async function createClient() {
         getAll() {
           return cookieStore.getAll()
         },
-        setAll(cookiesToSet: { name: string; value: string; options: CookieOptions }[]) {
+        setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
               cookieStore.set(name, value, options)
             )
-          } catch {}
+          } catch {
+            // 서버 컴포넌트에서 쿠키 설정 시 무시
+          }
         },
       },
     }
