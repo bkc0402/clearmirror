@@ -7,8 +7,7 @@ export default async function DashboardPage() {
 
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   
-  console.log('AUTH USER:', user?.id, 'ERROR:', authError?.message)
-  
+ 
   if (!user) redirect('/login')
 
   const { data: students, error: studentsError } = await supabase
@@ -18,9 +17,6 @@ export default async function DashboardPage() {
   const { data: textbooks, error: textbooksError } = await supabase
     .from('textbooks')
     .select('*')
-
-  console.log('STUDENTS:', students?.length, 'ERROR:', studentsError?.message)
-  console.log('TEXTBOOKS:', textbooks?.length, 'ERROR:', textbooksError?.message)
 
   return (
     <DashboardClient
